@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>后端测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .testing {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 后端API测试</h1>
+    
+    <div id="status" class="status testing">
+        正在测试后端连接...
+    </div>
+    
+    <button onclick="testBackend()">重新测试</button>
+    
+    <h2>测试结果：</h2>
+    <pre id="result">等待测试...</pre>
+    
+    <h2>如果后端正常：</h2>
+    <p>
+        ✅ 访问管理后台: <a href="http://localhost:3001" target="_blank">http://localhost:3001</a><br>
+        📧 邮箱: admin@example.com<br>
+        🔑 密码: admin123
+    </p>
+    
+    <script>
+        async function testBackend() {
+            const statusDiv = document.getElementById('status');
+            const resultPre = document.getElementById('result');
+            
+            statusDiv.className = 'status testing';
+            statusDiv.textContent = '正在测试后端连接...';
+            resultPre.textContent = '测试中...';
+            
+            const tests = [];
+            
+            // Test 1: Health endpoint
+            try {
+                const startTime = Date.now();
+                const response = await fetch('http://localhost:9090/health');
+                const data = await response.json();
+                const duration = Date.now() - startTime;
+                
+                tests.push({
+                    name: '健康检查',
+                    status: response.ok ? '✅ 成功' : '❌ 失败',
+                    details: `响应时间: ${duration}ms, 数据: ${JSON.stringify(data)}`
+                });
+                
+                if (response.ok) {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = '✅ 后端API正常运行！<br>可以登录管理后台了';
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ 后端返回错误状态码: ' + response.status;
+                }
+            } catch (error) {
+                tests.push({
+                    name: '健康检查',
+                    status: '❌ 失败',
+                    details: '错误: ' + error.message
+                });
+                
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ 无法连接到后端<br>错误: ' + error.message;
+            }
+            
+            // Test 2: API endpoint
+            try {
+                const startTime = Date.now();
+                const response = await fetch('http://localhost:9090/api/categories');
+                const duration = Date.now() - startTime;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    tests.push({
+                        name: '分类API',
+                        status: '✅ 成功',
+                        details: `响应时间: ${duration}ms, 数据: ${JSON.stringify(data).substring(0, 100)}...`
+                    });
+                } else {
+                    tests.push({
+                        name: '分类API',
+                        status: '⚠️  响应码: ' + response.status,
+                        details: '可能是数据库未初始化'
+                    });
+                }
+            } catch (error) {
+                tests.push({
+                    name: '分类API',
+                    status: '❌ 失败',
+                    details: '错误: ' + error.message
+                });
+            }
+            
+            // Display results
+            resultPre.textContent = tests.map(t => 
+                `${t.status} - ${t.name}\n${t.details}\n`
+            ).join('\n');
+        }
+        
+        // Auto-test on page load
+        window.onload = () => {
+            setTimeout(testBackend, 1000);
+        };
+    </script>
+</body>
+</html>

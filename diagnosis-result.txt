@@ -1,0 +1,91 @@
+🔍 完整诊断
+==========================
+
+1️⃣ 检查数据库表：
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Tables_in_short_drama
+ad_rewards
+admin_users
+categories
+dramas
+episodes
+subscriptions
+user_favorites
+users
+watch_histories
+
+2️⃣ 检查admin_users表结构：
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Field	Type	Null	Key	Default	Extra
+id	bigint unsigned	NO	PRI	NULL	auto_increment
+email	varchar(191)	NO	UNI	NULL	
+password_hash	longtext	NO		NULL	
+name	longtext	YES		NULL	
+role	varchar(191)	YES		editor	
+is_active	tinyint(1)	YES		1	
+last_login_at	datetime(3)	YES		NULL	
+created_at	datetime(3)	YES		NULL	
+updated_at	datetime(3)	YES		NULL	
+
+3️⃣ 查询所有管理员：
+mysql: [Warning] Using a password on the command line interface can be insecure.
+id	email	password_hash	name	role	is_active	last_login_at	created_at	updated_at
+4	admin@example.com	$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy	Admin	admin	1	NULL	2026-01-31 03:08:49.000	2026-01-31 03:08:49.000
+
+4️⃣ 尝试插入管理员：
+mysql: [Warning] Using a password on the command line interface can be insecure.
+
+5️⃣ 后端日志（最近30行）：
+[GIN] 2026/01/31 - 02:52:24 | 200 |       61.75µs |  151.101.90.132 | GET      "/health"
+[GIN] 2026/01/31 - 02:52:44 | 404 |      51.083µs |  151.101.90.132 | POST     "/admin/auth/login"
+[GIN] 2026/01/31 - 02:52:45 | 404 |       5.208µs |  151.101.90.132 | POST     "/admin/auth/login"
+[GIN] 2026/01/31 - 02:52:49 | 404 |       4.958µs |  151.101.90.132 | POST     "/admin/auth/login"
+[GIN] 2026/01/31 - 02:52:56 | 404 |       5.292µs |  151.101.90.132 | POST     "/admin/auth/login"
+[GIN] 2026/01/31 - 02:53:00 | 404 |       3.875µs |  151.101.90.132 | POST     "/admin/auth/login"
+[GIN] 2026/01/31 - 02:56:11 | 200 |      38.375µs |  151.101.90.132 | GET      "/health"
+[GIN] 2026/01/31 - 02:56:13 | 401 |   66.339501ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 02:56:14 | 401 |   68.108625ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 02:56:22 | 401 |   77.529583ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 02:58:34 | 401 |   77.399292ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 02:58:53 | 401 |   77.258166ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 02:59:13 | 401 |   76.853792ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:00:42 | 401 |   57.455667ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:00:43 | 401 |   58.265209ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:00:45 | 401 |   57.978583ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:00:45 | 401 |   59.874917ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:00:46 | 401 |      58.725ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:00:47 | 401 |   57.051625ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:01:37 | 401 |   76.745667ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:03:05 | 401 |   75.535042ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:03:10 | 401 |   77.324417ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:03:30 | 401 |     77.0295ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:06:11 | 401 |   76.394167ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:06:24 | 401 |   76.724375ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:07:07 | 401 |      75.869ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:09:27 | 401 |   76.631541ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:10:20 | 401 |      77.475ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:10:20 | 401 |   76.082666ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+[GIN] 2026/01/31 - 03:10:24 | 401 |   65.838875ms |  151.101.90.132 | POST     "/api/admin/auth/login"
+
+6️⃣ 测试登录（直接到后端9090）：
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to localhost (127.0.0.1) port 9090 (#0)
+> POST /api/admin/auth/login HTTP/1.1
+> Host: localhost:9090
+> User-Agent: curl/7.50.3
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 51
+> 
+} [51 bytes data]
+* upload completely sent off: 51 out of 51 bytes
+< HTTP/1.1 401 Unauthorized
+< Content-Type: application/json; charset=utf-8
+< Date: Sat, 31 Jan 2026 03:11:36 GMT
+< Content-Length: 31
+< 
+{ [31 bytes data]
+100    82  100    31  100    51    194    320 --:--:-- --:--:-- --:--:--   836* Curl_http_done: called premature == 0
+100    82  100    31  100    51    194    319 --:--:-- --:--:-- --:--:--   822
+* Connection #0 to host localhost left intact
+{"error":"Invalid credentials"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

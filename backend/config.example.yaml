@@ -1,0 +1,45 @@
+server:
+  port: 8080
+  mode: debug # debug, release
+
+database:
+  host: localhost
+  port: 3306
+  user: root
+  password: your_password
+  dbname: short_drama
+  max_idle_conns: 10
+  max_open_conns: 100
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0
+
+jwt:
+  secret: your_jwt_secret_key_change_this_in_production
+  expires_hours: 720 # 30 days
+
+stripe:
+  secret_key: sk_test_your_stripe_secret_key
+  webhook_secret: whsec_your_webhook_secret
+  price_monthly: price_monthly_id
+  price_yearly: price_yearly_id
+
+aws:
+  region: us-east-1
+  access_key_id: your_access_key
+  secret_access_key: your_secret_key
+  s3_bucket: your-bucket-name
+  cloudfront_domain: "" # optional
+
+admob:
+  app_id: ca-app-pub-xxxxx
+  rewarded_ad_unit_id: ca-app-pub-xxxxx/xxxxx
+
+cors:
+  allowed_origins:
+    - http://localhost:3000
+    - http://localhost:5173
+  allow_credentials: true

@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+*.apk
+*.aab
+
+# Environment
+.env
+.env.local
+config.yaml
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend
+backend/tmp/
+backend/logs/
+backend/uploads/
+
+# Database
+*.db
+*.sqlite
+
+# Capacitor
+.capacitor/
+android/
+ios/

@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "browse": "Explorar",
+    "favorites": "Favoritos",
+    "profile": "Perfil"
+  },
+  "home": {
+    "title": "Drama Corto",
+    "search_placeholder": "Buscar dramas, actores...",
+    "featured": "Destacado",
+    "continue_watching": "Continuar Viendo",
+    "trending": "Tendencias",
+    "new_releases": "Nuevos Lanzamientos",
+    "popular": "Popular Esta Semana"
+  },
+  "drama": {
+    "episodes": "Episodios",
+    "description": "Descripción",
+    "cast": "Reparto",
+    "rating": "Calificación",
+    "views": "vistas",
+    "add_to_favorites": "Agregar a Favoritos",
+    "remove_from_favorites": "Quitar",
+    "play": "Reproducir",
+    "trailer": "Ver Tráiler",
+    "episode": "Ep {number}",
+    "free": "Gratis",
+    "premium": "Premium",
+    "watch_ad": "Ver Anuncio para Desbloquear"
+  },
+  "player": {
+    "next_episode": "Siguiente Episodio",
+    "watch_ad_to_continue": "Ver anuncio para continuar",
+    "upgrade_to_premium": "Actualizar a Premium",
+    "skip_ad": "Saltar Anuncio"
+  },
+  "membership": {
+    "title": "Hazte Premium",
+    "subtitle": "Acceso ilimitado a todos los dramas",
+    "features": {
+      "ad_free": "Sin anuncios",
+      "early_access": "Acceso anticipado a nuevos episodios",
+      "hd_quality": "Streaming en calidad HD",
+      "offline": "Descarga y mira sin conexión"
+    },
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "subscribe": "Suscríbete Ahora",
+    "price_monthly": "$9.99/mes",
+    "price_yearly": "$79.99/año",
+    "save": "Ahorra 33%"
+  },
+  "profile": {
+    "my_profile": "Mi Perfil",
+    "watch_history": "Historial",
+    "settings": "Configuración",
+    "language": "Idioma",
+    "logout": "Cerrar Sesión",
+    "logout_confirm": "¿Seguro que quieres cerrar sesión?",
+    "logout_success": "Sesión cerrada",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse"
+  },
+  "auth": {
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "forgot_password": "¿Olvidaste tu Contraseña?",
+    "no_account": "¿No tienes una cuenta?",
+    "have_account": "¿Ya tienes una cuenta?",
+    "login_success": "¡Inicio de sesión exitoso!",
+    "register_success": "¡Registro exitoso!"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar"
+  }
+}

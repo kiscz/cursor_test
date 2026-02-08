@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "home": "Início",
+    "browse": "Explorar",
+    "favorites": "Favoritos",
+    "profile": "Perfil"
+  },
+  "home": {
+    "title": "Drama Curto",
+    "search_placeholder": "Buscar dramas, atores...",
+    "featured": "Em Destaque",
+    "continue_watching": "Continuar Assistindo",
+    "trending": "Em Alta",
+    "new_releases": "Novos Lançamentos",
+    "popular": "Popular Esta Semana"
+  },
+  "drama": {
+    "episodes": "Episódios",
+    "description": "Descrição",
+    "cast": "Elenco",
+    "rating": "Avaliação",
+    "views": "visualizações",
+    "add_to_favorites": "Adicionar aos Favoritos",
+    "remove_from_favorites": "Remover",
+    "play": "Assistir",
+    "trailer": "Ver Trailer",
+    "episode": "Ep {number}",
+    "free": "Grátis",
+    "premium": "Premium",
+    "watch_ad": "Assistir Anúncio para Desbloquear"
+  },
+  "player": {
+    "next_episode": "Próximo Episódio",
+    "watch_ad_to_continue": "Assistir anúncio para continuar",
+    "upgrade_to_premium": "Atualizar para Premium",
+    "skip_ad": "Pular Anúncio"
+  },
+  "membership": {
+    "title": "Torne-se Premium",
+    "subtitle": "Acesso ilimitado a todos os dramas",
+    "features": {
+      "ad_free": "Sem anúncios",
+      "early_access": "Acesso antecipado a novos episódios",
+      "hd_quality": "Streaming em qualidade HD",
+      "offline": "Baixe e assista offline"
+    },
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "subscribe": "Assinar Agora",
+    "price_monthly": "$9.99/mês",
+    "price_yearly": "$79.99/ano",
+    "save": "Economize 33%"
+  },
+  "profile": {
+    "my_profile": "Meu Perfil",
+    "watch_history": "Histórico",
+    "settings": "Configurações",
+    "language": "Idioma",
+    "logout": "Sair",
+    "logout_confirm": "Tem certeza que deseja sair?",
+    "logout_success": "Sessão encerrada",
+    "login": "Entrar",
+    "register": "Registrar"
+  },
+  "auth": {
+    "email": "E-mail",
+    "password": "Senha",
+    "login": "Entrar",
+    "register": "Registrar",
+    "forgot_password": "Esqueceu a Senha?",
+    "no_account": "Não tem uma conta?",
+    "have_account": "Já tem uma conta?",
+    "login_success": "Login bem-sucedido!",
+    "register_success": "Registro bem-sucedido!"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Algo deu errado",
+    "retry": "Tentar Novamente",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar"
+  }
+}
