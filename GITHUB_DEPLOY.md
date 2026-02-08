@@ -20,11 +20,27 @@
    sudo chmod +x /usr/local/bin/docker-compose
    ```
 
-2. **配置 GitHub Secrets**
+2. **配置 GitHub Secrets（必需）**
+   
+   ⚠️ **重要**: 如果不配置这些 Secrets，部署步骤会被跳过，但构建和推送镜像的步骤仍会成功运行。
+   
    在 GitHub 仓库设置中添加以下 Secrets：
-   - `DEPLOY_HOST`: 服务器 IP 地址
+   - 进入仓库 → Settings → Secrets and variables → Actions → New repository secret
+   - `DEPLOY_HOST`: 服务器 IP 地址或域名（如 `192.168.1.100` 或 `example.com`）
    - `DEPLOY_USER`: SSH 用户名（如 `root` 或 `ubuntu`）
-   - `DEPLOY_SSH_KEY`: SSH 私钥（用于连接服务器）
+   - `DEPLOY_SSH_KEY`: SSH 私钥内容（用于连接服务器）
+   
+   **如何生成 SSH 密钥：**
+   ```bash
+   # 在本地生成 SSH 密钥对（如果还没有）
+   ssh-keygen -t ed25519 -C "github-actions-deploy"
+   
+   # 将公钥添加到服务器的 ~/.ssh/authorized_keys
+   ssh-copy-id -i ~/.ssh/id_ed25519.pub user@your-server.com
+   
+   # 将私钥内容复制到 GitHub Secrets 的 DEPLOY_SSH_KEY
+   cat ~/.ssh/id_ed25519
+   ```
 
 #### 1.2 服务器端设置
 
