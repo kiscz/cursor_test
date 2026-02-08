@@ -33,6 +33,9 @@ backend/uploads/
 *.db
 *.sqlite
 
+# GitHub Actions
+.github/workflows/*.yml.bak
+
 # Capacitor
 .capacitor/
 android/
