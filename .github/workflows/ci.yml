@@ -81,7 +81,12 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: npm install
+        run: |
+          npm install --prefer-offline --no-audit
+          # Generate lock file if it doesn't exist
+          if [ ! -f package-lock.json ]; then
+            npm install --package-lock-only
+          fi
 
       - name: Lint
         working-directory: ./frontend
@@ -107,7 +112,12 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./admin
-        run: npm install
+        run: |
+          npm install --prefer-offline --no-audit
+          # Generate lock file if it doesn't exist
+          if [ ! -f package-lock.json ]; then
+            npm install --package-lock-only
+          fi
 
       - name: Build
         working-directory: ./admin
