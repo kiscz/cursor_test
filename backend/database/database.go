@@ -3,12 +3,14 @@ package database
 import (
 	"context"
 	"fmt"
+	"os"
 	"shortdrama/config"
 	"shortdrama/models"
 	"time"
 
 	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -19,18 +21,38 @@ var (
 )
 
 func Init(cfg *config.Config) error {
-	// Initialize MySQL
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		cfg.Database.User,
-		cfg.Database.Password,
-		cfg.Database.Host,
-		cfg.Database.Port,
-		cfg.Database.DBName,
-	)
+	// Check if using PostgreSQL (Supabase) or MySQL
+	usePostgres := os.Getenv("USE_POSTGRES") == "true" || cfg.Database.Port == 5432
+	
+	var db *gorm.DB
+	var err error
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return fmt.Errorf("failed to connect to database: %w", err)
+	if usePostgres {
+		// Initialize PostgreSQL (for Supabase)
+		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=require TimeZone=UTC",
+			cfg.Database.Host,
+			cfg.Database.User,
+			cfg.Database.Password,
+			cfg.Database.DBName,
+			cfg.Database.Port,
+		)
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err != nil {
+			return fmt.Errorf("failed to connect to PostgreSQL database: %w", err)
+		}
+	} else {
+		// Initialize MySQL
+		dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+			cfg.Database.User,
+			cfg.Database.Password,
+			cfg.Database.Host,
+			cfg.Database.Port,
+			cfg.Database.DBName,
+		)
+		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err != nil {
+			return fmt.Errorf("failed to connect to MySQL database: %w", err)
+		}
 	}
 
 	sqlDB, err := db.DB()
@@ -44,8 +66,10 @@ func Init(cfg *config.Config) error {
 
 	DB = db
 
-	// Disable foreign key checks temporarily
-	DB.Exec("SET FOREIGN_KEY_CHECKS=0")
+	// MySQL specific: Disable foreign key checks temporarily
+	if !usePostgres {
+		DB.Exec("SET FOREIGN_KEY_CHECKS=0")
+	}
 
 	// Auto migrate models
 	if err := DB.AutoMigrate(
@@ -59,13 +83,17 @@ func Init(cfg *config.Config) error {
 		&models.Subscription{},
 		&models.AdminUser{},
 	); err != nil {
-		// Re-enable foreign key checks before returning error
-		DB.Exec("SET FOREIGN_KEY_CHECKS=1")
+		if !usePostgres {
+			// Re-enable foreign key checks before returning error
+			DB.Exec("SET FOREIGN_KEY_CHECKS=1")
+		}
 		return fmt.Errorf("failed to auto migrate: %w", err)
 	}
 
-	// Re-enable foreign key checks
-	DB.Exec("SET FOREIGN_KEY_CHECKS=1")
+	// MySQL specific: Re-enable foreign key checks
+	if !usePostgres {
+		DB.Exec("SET FOREIGN_KEY_CHECKS=1")
+	}
 
 	// Initialize Redis
 	RDB = redis.NewClient(&redis.Options{
