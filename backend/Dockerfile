@@ -11,17 +11,17 @@ ENV GOSUMDB=sum.golang.google.cn
 # Install build dependencies
 RUN apk add --no-cache git
 
-# Copy go mod file first
-COPY go.mod ./
+# Copy go mod and go sum files first
+COPY go.mod go.sum ./
 
-# Initialize go.sum if it doesn't exist
+# Download dependencies
 RUN go mod download
 
 # Copy source code
 COPY . .
 
-# Download any additional dependencies
-RUN go mod tidy
+# Ensure dependencies are up to date
+RUN go mod tidy && go mod verify
 
 # Build binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o short-drama-api main.go
