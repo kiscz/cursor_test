@@ -66,10 +66,10 @@ Railway 会自动部署，查看 **"Logs"** 确认服务运行正常。
 
 ## 🔧 环境变量完整列表
 
-### 必需变量
+### PostgreSQL 配置（Railway 默认）
 
 ```bash
-# 数据库配置
+# 数据库配置（使用 Railway 变量引用）
 DATABASE_HOST=${{Postgres.PGHOST}}
 DATABASE_PORT=${{Postgres.PGPORT}}
 DATABASE_USER=${{Postgres.PGUSER}}
@@ -85,6 +85,28 @@ SERVER_MODE=release
 JWT_SECRET=your_production_jwt_secret_key_change_this
 JWT_EXPIRES_HOURS=720
 ```
+
+### MySQL 配置（使用外部 MySQL 服务）
+
+```bash
+# 数据库配置（外部 MySQL）
+DATABASE_HOST=your-mysql-host.com
+DATABASE_PORT=3306
+DATABASE_USER=your_mysql_user
+DATABASE_PASSWORD=your_mysql_password
+DATABASE_NAME=short_drama
+USE_POSTGRES=false
+
+# 服务器配置
+SERVER_PORT=9090
+SERVER_MODE=release
+
+# JWT 配置
+JWT_SECRET=your_production_jwt_secret_key_change_this
+JWT_EXPIRES_HOURS=720
+```
+
+⚠️ **注意**：Railway 默认只提供 PostgreSQL。如需使用 MySQL，请参考 [RAILWAY_MYSQL_CONFIG.md](./RAILWAY_MYSQL_CONFIG.md)
 
 ### 可选变量
 
