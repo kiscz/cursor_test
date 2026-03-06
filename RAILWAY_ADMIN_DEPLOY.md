@@ -43,7 +43,7 @@ RAILWAY_DOCKERFILE_PATH=Dockerfile.railway
 
 ### 4. 部署
 
-Railway 会使用 `admin/Dockerfile.railway`（基于 Caddy，原生支持 `$PORT`），开始构建并部署。
+Railway 会使用 `admin/Dockerfile.railway`（Node 内置 http 服务，直接读取 `PORT`），开始构建并部署。
 
 ---
 
