@@ -1,0 +1,7 @@
+# Railway: {$PORT} 由 Caddy 自动读取，默认 8080
+:{$PORT:8080} {
+    root * /srv
+    encode gzip
+    try_files {path} /index.html
+    file_server
+}
