@@ -62,6 +62,8 @@ services:
     build:
       context: ./admin
       dockerfile: Dockerfile
+      args:
+        USE_NGINX_PROXY: "1"
     container_name: shortdrama-admin
     ports:
       - "3001:80"

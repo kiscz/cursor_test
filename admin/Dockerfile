@@ -23,12 +23,12 @@ FROM nginx:alpine
 # Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Railway: VITE_API_BASE_URL 已设置则用 nginx.railway.conf（无 proxy）
-# Docker Compose: 用 nginx.conf（含 /api proxy）
-ARG VITE_API_BASE_URL
+# 默认用 nginx.railway.conf（无 proxy，适合 Railway/Vercel 等）
+# Docker Compose 需传 --build-arg USE_NGINX_PROXY=1 才用 nginx.conf（含 /api proxy）
+ARG USE_NGINX_PROXY
 COPY nginx.conf /tmp/nginx-docker.conf
 COPY nginx.railway.conf /tmp/nginx-railway.conf
-RUN if [ -n "$VITE_API_BASE_URL" ]; then cp /tmp/nginx-railway.conf /etc/nginx/conf.d/default.conf; else cp /tmp/nginx-docker.conf /etc/nginx/conf.d/default.conf; fi
+RUN if [ "$USE_NGINX_PROXY" = "1" ]; then cp /tmp/nginx-docker.conf /etc/nginx/conf.d/default.conf; else cp /tmp/nginx-railway.conf /etc/nginx/conf.d/default.conf; fi
 
 EXPOSE 80
 
