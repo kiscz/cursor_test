@@ -21,21 +21,24 @@ var (
 )
 
 func Init(cfg *config.Config) error {
-	// Check if using PostgreSQL (Supabase) or MySQL
+	// Check if using PostgreSQL (Supabase/Railway) or MySQL
 	usePostgres := os.Getenv("USE_POSTGRES") == "true" || cfg.Database.Port == 5432
-	
+
 	var db *gorm.DB
 	var err error
 
 	if usePostgres {
-		// Initialize PostgreSQL (for Supabase)
-		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=require TimeZone=UTC",
-			cfg.Database.Host,
-			cfg.Database.User,
-			cfg.Database.Password,
-			cfg.Database.DBName,
-			cfg.Database.Port,
-		)
+		// Prefer DATABASE_URL (Railway/Supabase provide this)
+		dsn := os.Getenv("DATABASE_URL")
+		if dsn == "" {
+			dsn = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=require TimeZone=UTC",
+				cfg.Database.Host,
+				cfg.Database.User,
+				cfg.Database.Password,
+				cfg.Database.DBName,
+				cfg.Database.Port,
+			)
+		}
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
 			return fmt.Errorf("failed to connect to PostgreSQL database: %w", err)
@@ -95,15 +98,28 @@ func Init(cfg *config.Config) error {
 		DB.Exec("SET FOREIGN_KEY_CHECKS=1")
 	}
 
-	// Initialize Redis
-	RDB = redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
-		Password: cfg.Redis.Password,
-		DB:       cfg.Redis.DB,
-	})
-
-	if err := RDB.Ping(ctx).Err(); err != nil {
-		return fmt.Errorf("failed to connect to redis: %w", err)
+	// Initialize Redis (optional - skip if USE_REDIS=false)
+	if os.Getenv("USE_REDIS") != "false" {
+		var redisOpt *redis.Options
+		if redisURL := os.Getenv("REDIS_URL"); redisURL != "" {
+			// Railway/Upstash 等提供 REDIS_URL，直接解析
+			redisOpt, err = redis.ParseURL(redisURL)
+			if err != nil {
+				return fmt.Errorf("failed to parse REDIS_URL: %w", err)
+			}
+		} else if cfg.Redis.Host != "" {
+			redisOpt = &redis.Options{
+				Addr:     fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
+				Password: cfg.Redis.Password,
+				DB:       cfg.Redis.DB,
+			}
+		}
+		if redisOpt != nil {
+			RDB = redis.NewClient(redisOpt)
+			if err := RDB.Ping(ctx).Err(); err != nil {
+				return fmt.Errorf("failed to connect to redis: %w", err)
+			}
+		}
 	}
 
 	return nil

@@ -18,6 +18,16 @@
 
 点击后端服务 → **"Variables"** → 添加以下变量：
 
+**方式 A：使用 DATABASE_URL（推荐，最简单）**
+```bash
+# 数据库连接（Railway 自动提供）
+DATABASE_URL=${{Postgres.DATABASE_PRIVATE_URL}}
+
+# 使用 PostgreSQL
+USE_POSTGRES=true
+```
+
+**方式 B：使用分项变量**
 ```bash
 # 数据库（使用 Railway 变量引用）
 DATABASE_HOST=${{Postgres.PGHOST}}
@@ -40,6 +50,9 @@ JWT_EXPIRES_HOURS=720
 # CORS（根据你的前端域名）
 CORS_ALLOWED_ORIGINS=https://your-frontend.com
 CORS_ALLOW_CREDENTIALS=true
+
+# Redis（可选，不添加 Redis 时设为 false）
+USE_REDIS=false
 ```
 
 ### 4. 运行数据库迁移（1 分钟）
@@ -111,10 +124,12 @@ JWT_EXPIRES_HOURS=720
 ### 可选变量
 
 ```bash
-# Redis（如果添加了 Redis 服务）
-REDIS_HOST=${{Redis.REDIS_HOST}}
-REDIS_PORT=${{Redis.REDIS_PORT}}
-REDIS_PASSWORD=${{Redis.REDIS_PASSWORD}}
+# Redis（如果添加了 Redis 服务，详见 RAILWAY_REDIS_CONFIG.md）
+REDIS_URL=${{Redis.REDIS_URL}}
+# 或分项配置：
+# REDIS_HOST=${{Redis.REDIS_HOST}}
+# REDIS_PORT=${{Redis.REDIS_PORT}}
+# REDIS_PASSWORD=${{Redis.REDIS_PASSWORD}}
 
 # CORS
 CORS_ALLOWED_ORIGINS=https://your-frontend.com,https://your-admin.com
@@ -161,4 +176,6 @@ AWS_S3_BUCKET=...
 
 ---
 
-详细部署指南请查看：[RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md)
+详细部署指南请查看：
+- [RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md)
+- [RAILWAY_REDIS_CONFIG.md](./RAILWAY_REDIS_CONFIG.md) - Redis 配置

@@ -90,9 +90,9 @@ AWS_S3_BUCKET=your-bucket-name
 
 ---
 
-## 🔧 当前代码限制
+## 🔧 环境变量支持
 
-**注意**：当前后端代码从 YAML 文件读取配置，**不支持直接通过环境变量覆盖配置**。
+**已支持**：后端已支持通过环境变量覆盖配置（`DATABASE_*`、`MYSQL_*`、`USE_POSTGRES` 等）。详见 [RAILWAY_MYSQL_INIT.md](./RAILWAY_MYSQL_INIT.md) 获取完整初始化步骤。
 
 ### 解决方案 A: 修改代码支持环境变量（推荐）
 

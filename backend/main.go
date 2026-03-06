@@ -23,6 +23,7 @@ func main() {
 	}
 
 	// Initialize database
+	log.Printf("Connecting to DB: host=%s port=%d user=%s dbname=%s", cfg.Database.Host, cfg.Database.Port, cfg.Database.User, cfg.Database.DBName)
 	if err := database.Init(cfg); err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
