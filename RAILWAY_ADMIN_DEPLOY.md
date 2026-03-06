@@ -40,7 +40,7 @@ VITE_API_BASE_URL=https://${{Backend.RAILWAY_PUBLIC_DOMAIN}}/api
 
 ### 4. 部署
 
-Railway 会自动检测 `admin/Dockerfile` 和 `admin/railway.json`，开始构建并部署。
+Railway 会使用 `admin/Dockerfile.railway`（基于 serve，自动支持 PORT），开始构建并部署。
 
 ---
 

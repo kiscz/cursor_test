@@ -1,0 +1,20 @@
+# Railway 专用：用 serve 替代 nginx，自动支持 PORT
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine
+WORKDIR /app
+RUN npm install -g serve
+COPY --from=builder /app/dist /app/dist
+
+# serve 支持 SPA 路由，-l 使用 Railway 的 PORT
+EXPOSE 8080
+CMD ["sh", "-c", "serve -s dist -l ${PORT:-8080}"]
