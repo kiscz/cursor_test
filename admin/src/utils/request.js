@@ -1,8 +1,19 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
+/** Ensure baseURL is a full URL when it looks like a hostname (e.g. "foo.up.railway.app/api" without protocol) */
+function ensureFullUrl(base) {
+  if (!base || typeof base !== 'string') return base
+  const s = base.trim()
+  if (s.startsWith('http://') || s.startsWith('https://') || s.startsWith('/')) return s
+  // Hostname-like: contains a dot, no leading slash → prepend https://
+  if (s.includes('.') && !s.startsWith('/')) return 'https://' + s
+  return s
+}
+
+const rawBase = window.__ADMIN_API_BASE__ || import.meta.env.VITE_API_BASE_URL || '/api'
 const request = axios.create({
-  baseURL: window.__ADMIN_API_BASE__ || import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: ensureFullUrl(rawBase),
   timeout: 30000
 })
 

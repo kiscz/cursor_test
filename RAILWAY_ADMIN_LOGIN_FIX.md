@@ -8,8 +8,9 @@
 
 Admin 前端需要请求**后端 API** 完成登录。常见问题：
 
-1. **API 地址错误**：Admin 的 `VITE_API_BASE_URL` 未指向正确的后端
-2. **CORS 未配置**：后端未允许 Admin 域名跨域
+1. **API 地址错误**：Admin 的 `VITE_API_BASE_URL` 或 `API_BASE_URL` 未指向正确的后端
+2. **缺少协议**：API 地址必须为完整 URL（含 `https://`），如 `https://xxx.up.railway.app/api`。若只写 `xxx.up.railway.app/api`，请求会被当作相对路径，返回 HTML 而非 API 数据
+3. **CORS 未配置**：后端未允许 Admin 域名跨域
 
 ---
 

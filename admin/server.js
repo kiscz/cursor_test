@@ -23,8 +23,19 @@ const MIME = {
   '.woff2': 'font/woff2',
 };
 
+// 运行时 API 地址：Railway 设置 API_BASE_URL 或 VITE_API_BASE_URL
+const API_BASE = process.env.API_BASE_URL || process.env.VITE_API_BASE_URL || '/api';
+
 const server = http.createServer((req, res) => {
   const urlPath = (req.url || '/').split('?')[0];
+
+  // 动态返回 config.json，使用环境变量中的 API 地址
+  if (urlPath === '/config.json') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ apiBaseUrl: API_BASE }));
+    return;
+  }
+
   let filePath = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
 
   fs.stat(filePath, (statErr, stat) => {
