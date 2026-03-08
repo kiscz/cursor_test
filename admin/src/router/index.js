@@ -63,10 +63,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const adminStore = useAdminStore()
+  const hasToken = adminStore.isLoggedIn || !!localStorage.getItem('admin_token')
   
-  if (to.meta.requiresAuth && !adminStore.isLoggedIn) {
+  if (to.meta.requiresAuth && !hasToken) {
     next('/login')
-  } else if (to.path === '/login' && adminStore.isLoggedIn) {
+  } else if (to.path === '/login' && hasToken) {
     next('/dashboard')
   } else {
     next()

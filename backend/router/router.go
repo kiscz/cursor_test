@@ -121,6 +121,7 @@ func Setup(cfg *config.Config) *gin.Engine {
 			admin.DELETE("/episodes/:id", handlers.AdminDeleteEpisode)
 
 			// Category management
+			admin.GET("/categories", handlers.AdminGetCategories)
 			admin.POST("/categories", handlers.AdminCreateCategory)
 			admin.PUT("/categories/:id", handlers.AdminUpdateCategory)
 			admin.DELETE("/categories/:id", handlers.AdminDeleteCategory)

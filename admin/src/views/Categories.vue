@@ -76,8 +76,8 @@ const categoryForm = ref({
 const loadCategories = async () => {
   loading.value = true
   try {
-    const { data } = await axios.get('/categories')
-    categories.value = data
+    const { data } = await axios.get('/admin/categories')
+    categories.value = data || []
   } finally {
     loading.value = false
   }

@@ -284,6 +284,15 @@ func AdminDeleteEpisode(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Episode deleted"})
 }
 
+func AdminGetCategories(c *gin.Context) {
+	var categories []models.Category
+	if err := database.DB.Order("sort_order ASC, id ASC").Find(&categories).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch categories"})
+		return
+	}
+	c.JSON(http.StatusOK, categories)
+}
+
 func AdminCreateCategory(c *gin.Context) {
 	var category models.Category
 	if err := c.ShouldBindJSON(&category); err != nil {

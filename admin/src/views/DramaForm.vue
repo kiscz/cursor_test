@@ -108,8 +108,8 @@ const rules = {
 }
 
 const loadCategories = async () => {
-  const { data } = await axios.get('/categories')
-  categories.value = data
+  const { data } = await axios.get('/admin/categories')
+  categories.value = data || []
 }
 
 const loadDrama = async () => {

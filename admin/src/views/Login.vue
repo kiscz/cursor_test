@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAdminStore } from '../stores/admin'
 import { ElMessage } from 'element-plus'
@@ -81,21 +81,22 @@ const rules = {
 }
 
 const handleLogin = async () => {
-  await formRef.value.validate(async (valid) => {
-    if (!valid) return
-    
-    loading.value = true
-    
-    try {
-      await adminStore.login(form.value.email, form.value.password)
-      ElMessage.success('Login successful')
-      router.push('/dashboard')
-    } catch (error) {
-      ElMessage.error('Login failed')
-    } finally {
-      loading.value = false
-    }
-  })
+  try {
+    await formRef.value.validate()
+  } catch {
+    return
+  }
+  loading.value = true
+  try {
+    await adminStore.login(form.value.email, form.value.password)
+    ElMessage.success('Login successful')
+    await nextTick()
+    await router.replace('/dashboard')
+  } catch (error) {
+    ElMessage.error(error?.response?.data?.error || 'Login failed')
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
