@@ -7,15 +7,18 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 运行时加载 API 地址（支持部署后修改 config.json 无需重建）
-let apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
-try {
-  const res = await fetch('/config.json?' + Date.now())
-  if (res.ok) {
-    const cfg = await res.json()
-    if (cfg.apiBaseUrl) apiBaseUrl = cfg.apiBaseUrl
-  }
-} catch (_) {}
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
 window.__ADMIN_API_BASE__ = apiBaseUrl
+
+async function loadConfig() {
+  try {
+    const res = await fetch('/config.json?' + Date.now())
+    if (res.ok) {
+      const cfg = await res.json()
+      if (cfg.apiBaseUrl) window.__ADMIN_API_BASE__ = cfg.apiBaseUrl
+    }
+  } catch (_) {}
+}
 
 const app = createApp(App)
 
@@ -28,4 +31,4 @@ app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
 
-app.mount('#app')
+loadConfig().then(() => app.mount('#app'))
