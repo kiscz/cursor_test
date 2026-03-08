@@ -1,67 +1,66 @@
 # Admin 登录 Network Error 修复指南
 
-当 Admin 登录显示 "Login failed" 或 "Network error" 时，按以下步骤排查。
+当 Admin 登录显示 "Login failed" 或 "Network error - check API URL and CORS" 时，按以下步骤排查。
 
 ---
 
-## 原因
+## 推荐方案：代理（无 CORS 问题）
 
-Admin 前端需要请求**后端 API** 完成登录。常见问题：
+Admin 的 `server.js` 支持将 `/api` 代理到后端，前端请求同源 `/api`，**无需配置 CORS**。
 
-1. **API 地址错误**：Admin 的 `VITE_API_BASE_URL` 或 `API_BASE_URL` 未指向正确的后端
-2. **缺少协议**：API 地址必须为完整 URL（含 `https://`），如 `https://xxx.up.railway.app/api`。若只写 `xxx.up.railway.app/api`，请求会被当作相对路径，返回 HTML 而非 API 数据
-3. **CORS 未配置**：后端未允许 Admin 域名跨域
+### 1. 在 Admin 服务设置环境变量
+
+在 **Admin 服务** → **Variables** 中添加：
+
+```bash
+BACKEND_URL=https://你的后端域名
+```
+
+示例（替换为你的后端 Railway 域名）：
+```bash
+BACKEND_URL=https://cursortest-production-2b3c.up.railway.app
+```
+
+或使用 Railway 变量引用：
+```bash
+BACKEND_URL=https://${{Backend.RAILWAY_PUBLIC_DOMAIN}}
+```
+
+> 不要以 `/api` 结尾，服务会自动拼接。
+
+### 2. 重新部署 Admin
+
+保存变量后，Railway 会自动重新部署。部署完成后，`/config.json` 会返回 `apiBaseUrl: "/api"`，前端请求同源，由 Admin 代理到后端。
 
 ---
 
-## 修复步骤
+## 备选方案：直连后端（需配置 CORS）
 
-### 1. 确认后端服务 URL
+若不想用代理，可让前端直接请求后端 URL，但必须配置 CORS。
 
-在 Railway 项目中找到**后端服务**（Go API），获取其公共域名，例如：
-- `https://cursortest-production-xxxx.up.railway.app`（注意替换为你的实际域名）
-
-### 2. 配置 Admin 的 API 地址
-
-在 **Admin 服务** → **Variables** 中设置：
+### 1. Admin 变量
 
 ```bash
 VITE_API_BASE_URL=https://你的后端域名/api
 ```
 
-示例：
-```bash
-VITE_API_BASE_URL=https://cursortest-production-2b3c.up.railway.app/api
-```
-
-> 必须以 `/api` 结尾。若使用变量引用：`VITE_API_BASE_URL=https://${{Backend.RAILWAY_PUBLIC_DOMAIN}}/api`，需将 `Backend` 改为实际后端服务名。
-
-### 3. 配置后端的 CORS
-
-在 **后端服务** → **Variables** 中设置：
+### 2. 后端 CORS 变量
 
 ```bash
-CORS_ALLOWED_ORIGINS=https://cursortest-production-1aff.up.railway.app
+CORS_ALLOWED_ORIGINS=https://你的Admin域名
 ```
 
-> 使用 **https**，不要用 http。域名需与 Admin 实际访问地址一致。
-
-### 4. 重新部署
-
-1. 修改 Admin 变量后，需**重新部署** Admin（会触发重新构建）
-2. 修改后端 CORS 后，**重新部署**后端
+### 3. 重新部署 Admin 与后端
 
 ---
 
 ## 验证
 
-1. 打开 Admin：`https://cursortest-production-1aff.up.railway.app`
-2. 打开浏览器开发者工具（F12）→ Network
-3. 尝试登录
-4. 查看请求：
-   - 若请求发往错误地址 → 检查 `VITE_API_BASE_URL`
-   - 若出现 CORS 错误 → 检查后端 `CORS_ALLOWED_ORIGINS`
-   - 若请求超时/连接失败 → 检查后端是否正常运行
+1. 打开 Admin 页面
+2. F12 → Network，尝试登录
+3. 查看 `/api/admin/auth/login` 请求：
+   - 若为代理：请求发往 Admin 同源，状态 200 或 4xx
+   - 若为直连：请求发往后端域名，需无 CORS 报错
 
 ---
 
