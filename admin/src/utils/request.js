@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
 const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: window.__ADMIN_API_BASE__ || import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 30000
 })
 
@@ -48,7 +48,8 @@ request.interceptors.response.use(
           ElMessage.error(data.message || 'Request failed')
       }
     } else {
-      ElMessage.error('Network error')
+      const msg = error.code === 'ERR_NETWORK' ? 'Network error - check API URL and CORS' : (error.message || 'Network error')
+      ElMessage.error(msg)
     }
     
     return Promise.reject(error)
