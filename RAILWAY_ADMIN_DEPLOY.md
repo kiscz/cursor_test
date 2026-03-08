@@ -18,7 +18,7 @@
 1. 在 Railway 项目中点击 **"+ New"**
 2. 选择 **"GitHub Repo"**（若未添加则先连接仓库）
 3. 选择同一仓库
-4. **重要**：在配置中设置 **Root Directory** 为 `admin`
+4. **Root Directory**：设为 `admin`，或留空（使用根目录的 `Dockerfile.railway`）
 
 ### 2. 配置构建变量
 

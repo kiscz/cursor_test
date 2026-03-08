@@ -1,0 +1,24 @@
+# Railway Admin 部署（根目录入口，构建 admin/）
+# 当 Root Directory 未设为 admin 时使用
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
+COPY admin/package*.json ./
+RUN npm install
+COPY admin/ .
+RUN npm run build
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY admin/server.js ./
+
+ARG VITE_API_BASE_URL
+RUN echo '{"apiBaseUrl":"'${VITE_API_BASE_URL:-/api}'"}' > ./dist/config.json
+
+EXPOSE 8080
+ENV NODE_ENV=production
+CMD ["node", "server.js"]
