@@ -1,0 +1,22 @@
+# Railway 专用：Node 内置 http 静态服务，支持 PORT 与 /api 代理
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL:-/api}
+
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY server.js ./
+
+EXPOSE 8080
+ENV NODE_ENV=production
+
+# 监听 0.0.0.0:PORT，Railway 注入 PORT
+CMD ["node", "server.js"]

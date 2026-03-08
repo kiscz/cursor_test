@@ -36,21 +36,25 @@ BACKEND_URL=https://${{Backend.RAILWAY_PUBLIC_DOMAIN}}
 
 ## 备选方案：直连后端（需配置 CORS）
 
-若不想用代理，可让前端直接请求后端 URL，但必须配置 CORS。
+若 Admin 直接请求后端 URL（如 `https://incredible-balance-production-791d.up.railway.app/api`），必须在**后端**配置 CORS。
 
-### 1. Admin 变量
+### 1. 后端 CORS 变量（必填）
 
-```bash
-VITE_API_BASE_URL=https://你的后端域名/api
-```
-
-### 2. 后端 CORS 变量
+在 **Backend 服务** → **Variables** 中添加：
 
 ```bash
-CORS_ALLOWED_ORIGINS=https://你的Admin域名
+CORS_ALLOWED_ORIGINS=https://cursortest-production-1aff.up.railway.app
 ```
 
-### 3. 重新部署 Admin 与后端
+> 将 `cursortest-production-1aff.up.railway.app` 替换为你的 **Admin 实际访问域名**（不含路径）。多个域名用逗号分隔。
+
+### 2. Admin 变量（若使用直连）
+
+```bash
+VITE_API_BASE_URL=https://incredible-balance-production-791d.up.railway.app/api
+```
+
+### 3. 重新部署 Backend 与 Admin
 
 ---
 

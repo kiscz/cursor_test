@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { showFailToast } from 'vant'
 
+const rawBase = window.__API_BASE__ || import.meta.env.VITE_API_BASE_URL || '/api'
 const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: rawBase,
   timeout: 30000
 })
 
