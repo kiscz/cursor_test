@@ -84,5 +84,9 @@ A: 使用 `BACKEND_URL` 代理方案（推荐，无 CORS）。若直连后端，
 **Q: 构建失败？**  
 A: 确认 Root Directory 已设为 `frontend`，Railway 会从 `frontend/` 目录构建。
 
-**Q: 502 Bad Gateway？**  
-A: 检查 Root Directory、Port 设置，查看 Deploy Logs 确认服务已启动。
+**Q: 502 Bad Gateway（访问 /api/* 时）？**  
+A: 通常是代理无法连接后端，请检查：
+1. **BACKEND_URL** 是否已设置且正确（如 `https://incredible-balance-production-791d.up.railway.app`）
+2. 后端服务是否正常运行（访问 `https://后端域名/health` 应返回 200）
+3. 查看 Frontend 的 Deploy Logs，确认启动时有 `API proxy enabled: /api -> https://...` 日志
+4. Railway 变量引用 `${{Backend.RAILWAY_PUBLIC_DOMAIN}}` 中的服务名需与项目内后端服务名完全一致

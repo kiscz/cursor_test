@@ -49,16 +49,17 @@ function proxyToBackend(req, res, urlPath, query) {
     port: u.port || (u.protocol === 'https:' ? 443 : 80),
     path: u.pathname + u.search,
     method: req.method,
-    headers: { ...req.headers, host: u.host }
+    headers: { ...req.headers, host: u.host },
+    timeout: 15000
   };
   const proxyReq = client.request(opts, (proxyRes) => {
     res.writeHead(proxyRes.statusCode, proxyRes.headers);
     proxyRes.pipe(res);
   });
   proxyReq.on('error', (err) => {
-    console.error('Proxy error:', err.message);
+    console.error('Proxy error to', targetUrl, ':', err.message);
     res.writeHead(502, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Backend unreachable', message: err.message }));
+    res.end(JSON.stringify({ error: 'Backend unreachable', message: err.message, target: targetUrl }));
   });
   req.pipe(proxyReq);
 }
@@ -105,4 +106,9 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
+  if (BACKEND_URL) {
+    console.log(`API proxy enabled: /api -> ${BACKEND_URL}`);
+  } else {
+    console.warn('BACKEND_URL not set - /api requests will not be proxied');
+  }
 });
